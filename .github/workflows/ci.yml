@@ -42,3 +42,10 @@ jobs:
       # TypeScript compile + Vite production build; must succeed to pass CI
       - name: Build
         run: npm run build
+
+      # Notify Vercel so Deployment Checks can wait for this job before promoting
+      - name: Notify Vercel
+        if: always()
+        uses: vercel/repository-dispatch/actions/status@v1
+        with:
+          name: "ci-build-and-test"
