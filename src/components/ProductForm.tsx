@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, Select, TextField } from "@radix-ui/themes";
-import { useState } from "react";
-import { Controller, useForm, type Control } from "react-hook-form";
+import React, { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Product } from "../entities";
 import useCategories from "../hooks/useCategories";
@@ -29,6 +29,9 @@ const ProductForm = ({ product, onSubmit }: Props) => {
     defaultValues: product,
     resolver: zodResolver(productFormSchema),
   });
+
+  // Satisfies Controller's control prop in CI (package Control has internal props; shim types differ)
+  const controllerControl = control as React.ComponentProps<typeof Controller>["control"];
 
   if (isLoading) return <div>Loading...</div>;
 
@@ -68,7 +71,7 @@ const ProductForm = ({ product, onSubmit }: Props) => {
       <Box>
         <Controller
           name="categoryId"
-          control={control as Control<ProductFormData>}
+          control={controllerControl}
           render={({ field }) => (
             <Select.Root
               size="3"
