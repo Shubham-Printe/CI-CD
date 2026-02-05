@@ -1,35 +1,44 @@
+# CI workflow: runs lint, tests, and build on every push/PR to main.
 
 name: CI
 
-on: 
-    push:
-        branches: [main]
-    pull_request:
-        branches: [main]
+# When to run this workflow
+on:
+  push:
+    branches: [main]      # On pushes to main
+  pull_request:
+    branches: [main]       # On PRs targeting main
 
 jobs:
-    build-and-test:
-        runs-on: ubuntu-latest
+  build-and-test:
+    # Use GitHub-hosted Ubuntu runner
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v4
+    steps:
+      # Get the repo code so later steps can run against it
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-            - name: Setup Node.js
-              uses: actions/setup-node@v4
-              with:
-                node-version: '20'
-                cache: 'npm'
+      # Install Node.js so we can run npm; cache speeds up future runs
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"   # Cache node_modules (and npm store) between runs
 
-            - name: Install dependencies
-              run: npm ci
+      # Install exact versions from package-lock.json (recommended for CI)
+      - name: Install dependencies
+        run: npm ci
 
-            - name: Lint
-              run: npm run lint
+      # Run ESLint; fails if there are errors or too many warnings
+      - name: Lint
+        run: npm run lint
 
-            - name: Run tests
-              run: npm run test:ci
-              # If you didn't add test:ci, use: npm run test -- --run
+      # Run test suite once (no watch mode). test:ci = vitest run
+      - name: Run tests
+        run: npm run test:ci
+        # Alternative if no test:ci script: npm run test -- --run
 
-            - name: Build
-              run: npm run build
+      # TypeScript compile + Vite production build; must succeed to pass CI
+      - name: Build
+        run: npm run build
