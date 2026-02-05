@@ -12,9 +12,8 @@ declare module "react-hook-form" {
   };
 
   export type FieldValues = Record<string, unknown>;
-  // Generic kept for API compatibility with useForm<T> / Controller
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- shim type
-  export type Control<TFieldValues extends FieldValues = FieldValues> = unknown;
+  /** Empty interface so control is assignable to Controller's prop (avoids unknown vs Control mismatch in CI). */
+  export interface Control<TFieldValues extends FieldValues = FieldValues> {}
 
   export type UseFormReturn<TFieldValues extends FieldValues = FieldValues> = {
     register: (name: string, options?: unknown) => Record<string, unknown>;

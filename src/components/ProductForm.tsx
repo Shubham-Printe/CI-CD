@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Box, Button, Select, TextField } from "@radix-ui/themes";
 import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, type Control } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Product } from "../entities";
 import useCategories from "../hooks/useCategories";
@@ -68,7 +68,7 @@ const ProductForm = ({ product, onSubmit }: Props) => {
       <Box>
         <Controller
           name="categoryId"
-          control={control}
+          control={control as Control<ProductFormData>}
           render={({ field }) => (
             <Select.Root
               size="3"
