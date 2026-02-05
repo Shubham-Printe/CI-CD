@@ -13,6 +13,10 @@ jobs:
   build-and-test:
     # Use GitHub-hosted Ubuntu runner
     runs-on: ubuntu-latest
+    # Required so the "Notify Vercel" step can create commit statuses
+    permissions:
+      contents: read
+      statuses: write
 
     steps:
       # Get the repo code so later steps can run against it
