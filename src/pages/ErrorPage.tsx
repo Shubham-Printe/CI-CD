@@ -11,7 +11,7 @@ const ErrorPage = () => {
         {isRouteErrorResponse(error)
           ? "The requested page was not found."
           : prod
-          ? "An unexpected error occurred."
+          ? "An unexpected error occurred. Please try again later."
           : (error as Error).message}
       </main>
     </div>
